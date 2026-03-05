@@ -25,6 +25,18 @@ app.use(express.json());
 
 //GET /api/productos (HUGO)
 
+app.get('/api/almacen_hn',(req,res) => {
+    const sql = 'SELECT * FROM productos';
+    pool.query(sql,(error,results) =>{
+        if(error){
+            console.log('Existe un erroe en la consulta SQL');
+            res.status(500).json({status: 500, message: 'Error en la consulta SQL'});
+        }
+        else{
+            res.status(200).json({status:200, message: 'Success', data: results});
+        }
+    });
+});
 
 
 
