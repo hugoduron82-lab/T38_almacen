@@ -1,0 +1,28 @@
+{
+  "name": "t38_almacen",
+  "version": "1.0.0",
+  "description": "APIs con conexion a BD My SQL",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugoduron82-lab/T38_almacen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hugoduron82-lab/T38_almacen/issues"
+  },
+  "homepage": "https://github.com/hugoduron82-lab/T38_almacen#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
