@@ -1,7 +1,6 @@
 -- =============================================
 -- SCRIPT DDL - SISTEMA DE INVENTARIO
 -- Base de datos: Mi Almacén Web HN
--- Versión básica para MySQL
 -- =============================================
 
 -- Eliminar base de datos si existe
