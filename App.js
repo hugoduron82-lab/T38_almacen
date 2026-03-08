@@ -39,19 +39,56 @@ app.get('/api/almacen_hn',(req,res) => {
 });
 
 
+// GET /api/productos/:id (Tania)
+app.get('/api/productos/:id', (req, res) => {
+    const id = req.params.id;
 
+    const sql = 'SELECT * FROM productos WHERE id = ?';
+    
+    pool.query(sql, [id], (error, results) => {
+        if(error){
+            console.log('Error en la consulta SQL');
+            return res.status(500).json({status: 500, message: 'Error en la consulta SQL'});
+        }
 
-//GET /api/productos/:id (Tania)
+        if(results.length > 0){
+            res.status(200).json({status: 200, message: 'Success', data: results[0]});
+        } else {
+            res.status(404).json({status: 404, message: 'Producto no encontrado'});
+        }
+    });
+});
 
+// POST /api/productos (Tania)
+app.post('/api/productos', (req, res) => {
+    // Evitar errores si el body viene vacío
+    if(!req.body) return res.status(400).json({ status: 400, message: 'Body vacío' });
 
+    const { nombre, descripcion, sku, precio_compra, precio_venta, stock_minimo, estado, category_id, provider_id } = req.body;
 
+    if(!nombre || !sku){
+        return res.status(400).json({status: 400, message: 'Nombre y SKU son obligatorios'});
+    }
 
+    if(precio_compra <= 0 || precio_venta <= 0){
+        return res.status(400).json({status: 400, message: 'Los precios deben ser mayores a 0'});
+    }
 
-//POST /api/productos (Tania)
+    const sql = `
+        INSERT INTO productos
+        (nombre, descripcion, sku, precio_compra, precio_venta, stock_minimo, estado, category_id, provider_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
+    pool.query(sql, [nombre, descripcion, sku, precio_compra, precio_venta, stock_minimo, estado, category_id, provider_id], (error, results) => {
+        if(error){
+            console.log('Error al insertar producto:', error);
+            return res.status(500).json({status: 500, message: 'Error al crear el producto'});
+        }
 
-
-
+        res.status(201).json({status: 201, message: 'Producto creado', id: results.insertId});
+    });
+});
 
 //PUT /api/productos/:id (Oscar)
 
