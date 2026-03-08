@@ -91,14 +91,47 @@ app.post('/api/productos', (req, res) => {
 });
 
 //PUT /api/productos/:id (Oscar)
-
+app.put('/api/productos/:id', (req, res) => {
+    const { id } = req.params;
+    const campos = ['sku', 'nombre', 'descripcion', 'precio_compra', 'precio_venta', 'stock_minimo', 'estado', 'categoria_id', 'proveedor_id'];
+    
+    // Filtrar campos que vienen en el body y construir la parte SET
+    const updates = campos.filter(c => req.body[c] !== undefined).map(c => `${c} = ?`);
+    const values = campos.filter(c => req.body[c] !== undefined).map(c => req.body[c]);
+    
+    if (updates.length === 0) {
+        return res.status(400).json({ mensaje: 'No hay datos para actualizar' });
+    }
+    
+    const sql = `UPDATE productos SET ${updates.join(', ')} WHERE producto_id = ?`;
+    pool.query(sql, [...values, id], (err, result) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'SKU duplicado' });
+            return res.status(500).json({ error: 'Error al actualizar' });
+        }
+        if (result.affectedRows === 0) return res.status(404).json({ mensaje: 'Producto no encontrado' });
+        res.json({ mensaje: 'Producto actualizado' });
+    });
+});
 
 
 
 
 //DELETE /api/productos/:id (Oscar)
-
-
+app.delete('/api/productos/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM productos WHERE producto_id = ?';
+    pool.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Error al eliminar el producto' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ mensaje: 'Producto no encontrado' });
+        }
+        res.json({ mensaje: 'Producto eliminado' });
+    });
+});
 
 
 
