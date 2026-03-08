@@ -38,25 +38,6 @@ app.get('/api/almacen_hn',(req,res) => {
     });
 });
 
-// GET /api/productos/:id (Tania)
-app.get('/api/productos/:id', (req, res) => {
-    const id = req.params.id;
-
-    const sql = 'SELECT * FROM productos WHERE id = ?';
-    
-    pool.query(sql, [id], (error, results) => {
-        if(error){
-            console.log('Error en la consulta SQL');
-            return res.status(500).json({status: 500, message: 'Error en la consulta SQL'});
-        }
-
-        if(results.length > 0){
-            res.status(200).json({status: 200, message: 'Success', data: results[0]});
-        } else {
-            res.status(404).json({status: 404, message: 'Producto no encontrado'});
-        }
-    });
-});
 
 // GET /api/productos/:id (Tania)
 app.get('/api/productos/:id', (req, res) => {
